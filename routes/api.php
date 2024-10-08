@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -10,5 +11,15 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 });
 Route::get('/users',[UserController::class,'index']);
+Route::get('/users/{id}',[UserController::class,'show']);
+
+
+Route::get('/products',[ProductController::class,'index']);
+
+//Prefix for V1 api requests
+Route::prefix('v1')->group(function () {
+    Route::get('/users',[UserController::class,'index_v1']);
+    Route::get('/users/{id}',[UserController::class,'show']);
+});
 
 
