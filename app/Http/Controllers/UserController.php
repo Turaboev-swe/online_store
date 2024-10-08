@@ -19,8 +19,8 @@ class UserController extends Controller
     }
     public function show(int $id): \Illuminate\Http\JsonResponse
     {
-        $users = User::findOrFail($id);
-        
+        $users = User::query()->findOrFail($id);
+
         return response()->json($users);
     }
 }

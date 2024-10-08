@@ -11,10 +11,12 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 });
 Route::get('/users',[UserController::class,'index']);
+
 Route::get('/users/{id}',[UserController::class,'show']);
 
-
 Route::get('/products',[ProductController::class,'index']);
+
+Route::get('/products/{id}',[ProductController::class,'show']);
 
 //Prefix for V1 api requests
 Route::prefix('v1')->group(function () {

@@ -12,8 +12,9 @@ class ProductController extends Controller
         $products = Product::all();
         return response()->json($products);
     }
-    public function show(Product $product): \Illuminate\Http\JsonResponse
+    public function show($id): \Illuminate\Http\JsonResponse
     {
-        return response()->json($product);
+        $products = Product::query()->findOrfail($id);
+        return response()->json($products);
     }
 }
