@@ -21,7 +21,7 @@ class CategoryFactory extends Factory
             'name' => $this->faker->name(),
             'description' => $this->faker->text(),
             'image' => $this->faker->imageUrl(),
-            'parent_id' => Category::factory(),
+            'parent_id' => Category::inRandomOrder()->first()?->id,
         ];
     }
 }
