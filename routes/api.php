@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Models\User;
@@ -7,21 +8,33 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-});
-Route::get('/users',[UserController::class,'index']);
 
-Route::get('/users/{id}',[UserController::class,'show']);
+// Users API
+Route::get('/user', function (Request $request) {return $request->user();})
+    ->middleware('auth:api');
+Route::get('/users',[UserController::class,'index'])
+    ->middleware('auth:sanctum');
+Route::get('/users/{id}',[UserController::class,'show'])
+    ->middleware('auth:sanctum');;
+Route::post('/users/create',[UserController::class,'store'])
+    ->middleware('auth:sanctum');
 
-Route::get('/products',[ProductController::class,'index']);
+//Products API
+Route::get('/products',[ProductController::class,'index'])
+    ->middleware('auth:sanctum');
+Route::get('/products/{id}',[ProductController::class,'show'])
+    ->middleware('auth:sanctum');
+Route::post('/products/store',[ProductController::class,'store'])
+    ->middleware('auth:sanctum');
 
-Route::get('/products/{id}',[ProductController::class,'show']);
+//Categories API
+Route::get('/category',[CategoryController::class,'index'])
+    ->middleware('auth:sanctum');
+Route::get('/category/{id}',[CategoryController::class,'show'])
+    ->middleware('auth:sanctum');
+Route::post('/category/store',[CategoryController::class,'store'])
+    ->middleware('auth:sanctum');
 
-//Prefix for V1 api requests
-Route::prefix('v1')->group(function () {
-    Route::get('/users',[UserController::class,'index_v1']);
-    Route::get('/users/{id}',[UserController::class,'show']);
-});
+
 
 

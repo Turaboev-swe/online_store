@@ -23,4 +23,22 @@ class UserController extends Controller
 
         return response()->json($users);
     }
+    public function store(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required',
+            'password' => 'required',
+        ]);
+        $user = User::query()->create([
+            'name'=>$request->input('name'),
+            'email'=>$request->input('email'),
+            'password'=>$request->input('password'),
+        ]);
+        return response()->json([
+            'message' => 'User created successfully',
+            'user' => $user,
+            'token'=>$user->createToken($user->name)->accessToken,
+        ]);
+    }
 }
