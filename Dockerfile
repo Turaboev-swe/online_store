@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /var/www
 
 # Copy the Laravel application files into the container
-COPY . /var/www
+COPY . .
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -25,3 +25,6 @@ RUN composer install
 
 # Set permissions for storage and bootstrap/cache
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
+
+# Create storage/logs directory and set permissions
+RUN mkdir -p /var/www/storage/logs && chown -R www-data:www-data /var/www/storage/logs
