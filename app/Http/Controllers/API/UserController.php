@@ -41,11 +41,6 @@ class UserController extends Controller
     public function update(Request $request, int $id): JsonResponse
     {
         $user = User::query()->findOrFail($id);
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required',
-            'password' => 'required',
-        ]);
         $user->update([
             'name'=>$request->input('name'),
             'email'=>$request->input('email'),

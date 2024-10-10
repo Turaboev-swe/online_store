@@ -126,5 +126,12 @@ class ProductController extends Controller
             'message' => "Mahsulot o'zgartirildi",
         ]);
     }
-
+    public function destroy(int $id): JsonResponse
+    {
+        $product = Product::query()->findOrFail($id);
+        $product->delete();
+        return response()->json([
+            'message' => "Mahsulot Muvaffaqiyatli o'chirildi!",
+        ]);
+    }
 }
