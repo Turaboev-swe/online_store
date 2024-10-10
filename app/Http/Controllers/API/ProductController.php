@@ -55,8 +55,9 @@
 //}
 
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
+use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
@@ -96,7 +97,7 @@ class ProductController extends Controller
             'description' => $request->input('description'),
             'price' => $request->input('price'),
             'category_id' => $request->input('category_id'),
-            'user_id' => 1, // Foydalanuvchi ID sini auth() orqali olish
+            'user_id' => auth()->id(), // Foydalanuvchi ID sini auth() orqali olish
             'in_stock' => $request->input('in_stock')
         ]);
 
@@ -104,6 +105,26 @@ class ProductController extends Controller
             'message' => 'Mahsulot yaratildi',
             'product' => $product,
         ], 201);
+    }
+    public function update(Request $request, $id): JsonResponse
+    {
+        $product = Product::query()->findOrFail($id);
+        if (!auth()->check()) {
+            return response()->json([
+                'message' => 'Foydalanuvchi autentifikatsiya qilinmagan.'
+            ], 401);
+        }
+        $product->update([
+            'name' => $request->input('name'),
+            'description' => $request->input('description'),
+            'price' => $request->input('price'),
+            'category_id' => $request->input('category_id'),
+            'in_stock' => $request->input('in_stock'),
+            'user_id' => auth()->id()
+        ]);
+        return response()->json([
+            'message' => "Mahsulot o'zgartirildi",
+        ]);
     }
 
 }
