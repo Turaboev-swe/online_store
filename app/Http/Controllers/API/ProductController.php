@@ -58,6 +58,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ProductResource;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
@@ -133,5 +134,12 @@ class ProductController extends Controller
         return response()->json([
             'message' => "Mahsulot Muvaffaqiyatli o'chirildi!",
         ]);
+    }
+    public function ShowByCategory(int $id): ProductResource
+    {
+        $products = Product::query()->where('category_id', $id)
+            ->with('category')
+            ->get();
+        return  new ProductResource($products->first());
     }
 }
