@@ -18,10 +18,10 @@ Route::resource('/categories', CategoryController::class)
 Route::resource('/products', ProductController::class)
     ->middleware('auth:sanctum');
 
-Route::resource('/cart', CartController::class)
+Route::resource('/carts', CartController::class)
     ->middleware('auth:sanctum');
 
-Route::resource('/order', OrderController::class)
+Route::resource('/orders', OrderController::class)
     ->middleware('auth:sanctum');
 
 
