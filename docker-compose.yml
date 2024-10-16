@@ -1,6 +1,6 @@
 services:
     nginx:
-        container_name: nginx
+        container_name: online_store_nginx
         image: nginx:alpine  # Use the Nginx image
         ports:
             - "8081:80"  # Map port 8080 on the host to port 80 inside the container
@@ -13,7 +13,7 @@ services:
             - laravel-network  # Connect to the custom network
 
     app:
-        container_name: app
+        container_name: online_store_app
         build: .  # Build from the Dockerfile
         depends_on:
             - db
@@ -36,8 +36,8 @@ services:
         networks:
             - laravel-network  # Connect to the custom network
 
-    node:
-        container_name: node
+    online_store_node:
+        container_name: online_store_node
         image: node:20
         working_dir: /var/www
         volumes:
