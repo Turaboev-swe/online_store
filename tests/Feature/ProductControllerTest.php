@@ -33,12 +33,15 @@ class ProductControllerTest extends TestCase
             ->assertJsonCount(3);
     }
 
-    public function test_store_creates_new_category()
+    public function test_store_creates_new_product()
     {
+        $category = Category::factory()->create();
         $response = $this->postJson('/api/products', [
             'name' => 'New Product',
+            'description' => 'This is a new product',
+            'price' => 100,
+            'category_id' => $category->id,
         ]);
-
         $response->assertStatus(201)
             ->assertJsonFragment(['name' => 'New Product']);
     }
@@ -46,14 +49,14 @@ class ProductControllerTest extends TestCase
     public function test_store_fails_with_invalid_data()
     {
         $response = $this->postJson('/api/products', [
-            'name' => '', // Invalid name
-        ]);
+            'name' => '',
 
+        ]);
         $response->assertStatus(422)
             ->assertJsonValidationErrors('name');
     }
 
-    public function test_show_returns_category()
+    public function test_show_returns_product()
     {
         $product = Product::factory()->create();
 
@@ -63,21 +66,23 @@ class ProductControllerTest extends TestCase
             ->assertJsonFragment(['name' => $product->name]);
     }
 
-    public function test_show_fails_for_nonexistent_category()
+    public function test_show_fails_for_nonexistent_product()
     {
-        $response = $this->getJson('/api/products/9999');
+        $response = $this->getJson('/api/products/8');
 
         $response->assertStatus(404);
     }
 
-    public function test_update_modifies_existing_category()
+    public function test_update_modifies_existing_product()
     {
         $product = Product::factory()->create();
 
         $response = $this->putJson("/api/products/{$product->id}", [
             'name' => 'Updated Product',
+            'description' => 'This is a new product',
+            'price' => 100,
+            'category_id' => $product->category_id,
         ]);
-
         $response->assertStatus(200)
             ->assertJsonFragment(['name' => 'Updated Product']);
     }
@@ -86,7 +91,7 @@ class ProductControllerTest extends TestCase
     {
         $product = Product::factory()->create();
 
-        $response = $this->putJson("/api/products/{$product->id}", [
+        $response = $this->putJson("/api/products/$product->id", [
             'name' => '', // Invalid name
         ]);
 
@@ -94,7 +99,7 @@ class ProductControllerTest extends TestCase
             ->assertJsonValidationErrors('name');
     }
 
-    public function test_destroy_removes_category()
+    public function test_destroy_removes_product()
     {
         $product = Product::factory()->create();
 
@@ -104,7 +109,7 @@ class ProductControllerTest extends TestCase
         $this->assertDatabaseMissing('products', ['id' => $product->id]);
     }
 
-    public function test_destroy_fails_for_nonexistent_category()
+    public function test_destroy_fails_for_nonexistent_product()
     {
         $response = $this->deleteJson('/api/categories/999');
 
